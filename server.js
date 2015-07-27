@@ -1,18 +1,17 @@
-var express = require('express');
+var express = require('./client/node_modules/express/lib/express.js');
 var fs = require('fs')
 var app = express();
 
-// Very likely going to replace this with fully static file server, and control the content via path
+app.use('/',express.static(__dirname + '/client'));
 
-app.use(express.static(__dirname + '/'));
+app.get('/content/*', function(req, res){
 
-app.get('/contents', function(req, res){
-
-  fs.readFile(req.url, function(err, data){
+  fs.readFile(__dirname + req.url, function(err, data){
     if (err) {
       console.log('error!', err);
     } else {
-      res.end(data);
+      res.type('json');
+      res.send(data);
     }
   })
 })
